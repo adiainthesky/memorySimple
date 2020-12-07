@@ -1,8 +1,16 @@
-import dealCards from './js/table.js';
 let currentId = 0; 
 let player1;
 let player2;
 let currentPlayer;
+
+
+$(document).ready(function(){
+  player1 = new Player(prompt("Please enter your name:"));
+	player2 = new Player(prompt("Please enter your name:"));
+  currentPlayer = player1;
+  // dealCards(); 
+  currentPlayer.turn();
+});
 
 function Player(name) {
   this.name = name;
@@ -10,27 +18,43 @@ function Player(name) {
   this.total = 0;
 };
 
-$(document).ready(function(){
-  dealCards(); 
-  player1 = new Player(prompt("Please enter your name:"));
-	player2 = new Player(prompt("Please enter your name:"));
-	currentPlayer = player1;
-  currentPlayer.turn();
-});
+const colors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "indigo"];
+//double colors...
+let rawPairs = colors.concat(colors);
+//randomize...
+let pairs = [];   //["green", "orange", "yellow", "purple", "pink", "indigo", ........."]
+while (rawPairs.length){
+  let randomIndex = Math.floor(Math.random() * rawPairs.length);
+  let randomColor = rawPairs.splice(randomIndex, 1)[0];
+  pairs.push(randomColor);
+}
+//create divs
+for (let id=0; id<pairs.length; id++){
+  //sixteen colors, randomly placed
+  $("#table").append("<div class='card' id='card_" + id + "' data-color='" + pairs[id] + "'></div>");
+}
+//assign click handler
+$("#table div").on("click", flipCard);  
 
+function flipCard(e) {
+  let div = e.target;
+  let color = div.getAttribute("data-color");
+  div.setAttribute("style", "background-color:" + color);
+  return color;
+};
 
 Player.prototype.turn = function() {
-  let color1 = "white";
-  let color2 = "white"
-  let card1 = this.flip(color1);
+  console.log(currentPlayer);
+  alert("Please select a card")
+  let card1 = flipCard();
   console.log(card1);
-  // console.log(color2);
+  console.log(color2);
 
 //  if (this.flip() ==  this.flip()) {
 //   return true;
 // console.log(card1);
 // console.log(card2);
-};
+// };
 
 //   function flip2() {
 //   alert("Please select another card");
@@ -41,16 +65,16 @@ Player.prototype.turn = function() {
 //   console.log(card2);
 //   });
 // };
-// }; 
+}; 
 
 // this works--color saved (but cant get it out of this function into another var)
-Player.prototype.flip = function() {   
+Player.prototype.flip = function(e) {   
   alert("Please select a card");
-  $("#table").click(function(e) {
+  $("#table").click(function() {
     let div = e.target;
-    let color = div.getAttribute("data-color");
+    color = div.getAttribute("data-color");
     console.log(color)
-    return color;
+    // return color;
   });
 
   //   alert("Please select a card");
